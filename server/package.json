@@ -1,0 +1,8 @@
+{
+  "name": "o-my-app-server",
+  "version": "0.0.1",
+  "description": "my cute websocket app",
+  "dependencies": {
+    "ws": "^0.8.1"
+  }
+}
