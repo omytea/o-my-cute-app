@@ -8,7 +8,7 @@ var wsClient = React.createClass({
     return {
       curText: 'Hello world',
       prevText: '',
-      serverIP: '192.168.1.108:8080',
+      serverIP: '',
       connected: false,
     };
   },
@@ -21,7 +21,7 @@ var wsClient = React.createClass({
   },
 
   onTextChanged(event) {
-    this.setState({ searchString: event.nativeEvent.text })
+    this.setState({ serverIP: event.nativeEvent.text })
   },
 
   onGoButtonPressed() {
@@ -63,7 +63,7 @@ var wsClient = React.createClass({
         </TouchableHighlight>
         <Text style={styles.eventLabel}>
           {this.state.curText + '\n'}
-          {this.state.prevText}
+          Prev: {this.state.prevText}
         </Text>
       </View>
     );
@@ -104,7 +104,8 @@ var styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
-  searchInput: {ipeight: 36,
+  ipInput: {
+    height: 36,
     padding: 4,
     marginRight: 5,
     flex: 4,
