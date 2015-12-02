@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Tahoma, Geneva, sans-serif;
+      }
+      div {
+        display: inline;
+      }
+    </style>
+    <script>
+      var host = window.document.location.host.replace(/:.*/, '');
+      var ws = new WebSocket('ws://' + host + ':8080');
+      var register = function() {
+        ws.send(JSON.stringify({ "act":"register", "client":"phone" }));
+      };
+      var move = function(motion, direction) {
+        var oMove = {
+          "act": "move",
+          "translate": [0,0,0],
+          "rotate": [0,0,0]
+        };
+        oMove[motion] = direction;
+        ws.send(JSON.stringify(oMove));
+      };
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

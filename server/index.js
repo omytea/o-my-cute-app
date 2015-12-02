@@ -3,12 +3,15 @@ var WebSocketServer = require('ws').Server
   	console.log("wss start");
   });
 
+var control = [];
+var view = [];
+
 wss.on('connection', function connection(ws) {
   console.log(ws.url + " comes in")
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+  	console.log('receive: ' + message)
+    ws.send(message);
+    console.log('send: ' + message)
   });
-
-  ws.send('message');
 });
 

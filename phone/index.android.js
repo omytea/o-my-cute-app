@@ -24,18 +24,28 @@ var wsClient = React.createClass({
     this.setState({ serverIP: event.nativeEvent.text })
   },
 
-  onGoButtonPressed() {
+  onConnectButtonPressed() {
     this.ws = new WebSocket('ws://' + this.state.serverIP)
     this.ws.onmessage = function(event){
       this.updateText(event.data)
     }
     this.setState({ connected: true })
     this.updateText("Connect to server " + this.state.serverIP)
+    // var oRegister = { "act":"register", "client":"phone"}
+    // this.ws.send(JSON.stringify(oRegister))
+    // this.ws.send(JSON.stringify({"act":"register", "client":"phone"}))
+    // this.updateText("send " + JSON.stringify(oRegister))
   },
 
-  onSendButtonPressed() {
-    this.ws.send(this.state.curText)
-    this.updateText("send message" )
+  onMotionButtonPressed(motion, direction) {
+    var oMove = {
+      "act": "move",
+      "translate": [0,0,0],
+      "rotate": [0,0,0]
+    }
+    oMove[motion] = direction
+    this.ws.send(JSON.stringify(oMove))
+    this.updateText("send message "+ JSON.stringify(oMove))
   },
 
   render: function() {
@@ -52,15 +62,56 @@ var wsClient = React.createClass({
             onChange={this.onTextChanged.bind(this)}/>
           <TouchableHighlight style={styles.button}
               underlayColor='#99d9f4'
-              onPress={this.onGoButtonPressed.bind(this)}>
+              onPress={this.onConnectButtonPressed.bind(this)}>
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>
+        <Text style={styles.description}>Translate</Text>
+        <View style={styles.flowRight}>
         <TouchableHighlight style={styles.button}
             underlayColor='#99d9f4'
-            onPress={this.onSendButtonPressed.bind(this)}>
-          <Text style={styles.buttonText}>Send</Text>
+            onPress={this.onMotionButtonPressed.bind(this, "translate", [0,0.1,0])}>
+          <Text style={styles.buttonText}>Up</Text>
         </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "translate", [0,-0.1,0])}>
+          <Text style={styles.buttonText}>Down</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "translate", [-0.1,0,0])}>
+          <Text style={styles.buttonText}>Left</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "translate", [0.1,0,0])}>
+          <Text style={styles.buttonText}>Right</Text>
+        </TouchableHighlight>
+        </View>
+        <Text style={styles.description}>Rotate</Text>
+        <View style={styles.flowRight}>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "rotate", [0,1,0])}>
+          <Text style={styles.buttonText}>Up</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "rotate", [0,-1,0])}>
+          <Text style={styles.buttonText}>Down</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "rotate", [-1,0,0])}>
+          <Text style={styles.buttonText}>Left</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+            underlayColor='#99d9f4'
+            onPress={this.onMotionButtonPressed.bind(this, "rotate", [1,0,0])}>
+          <Text style={styles.buttonText}>Right</Text>
+        </TouchableHighlight>
+        </View>
         <Text style={styles.eventLabel}>
           {this.state.curText + '\n'}
           Prev: {this.state.prevText}
